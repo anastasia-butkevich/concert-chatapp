@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .models import IngestDocs, ChatInputs
+from .api.models import IngestDocs, ChatInputs
 
 
 app = FastAPI()

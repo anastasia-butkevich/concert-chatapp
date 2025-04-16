@@ -1,5 +1,5 @@
-from rag.rag_pipeline import setup_pipeline
-from rag.vector_db import add_documents
+from rag.rag_main import setup_pipeline
+from rag.llm_call import add_documents
 
 texts = [
     "Taylor Swift will perform at Wembley Stadium, London in July 2026.",

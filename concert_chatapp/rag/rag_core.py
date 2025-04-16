@@ -2,8 +2,8 @@ from langchain_groq import ChatGroq
 from langchain.prompts import PromptTemplate
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.runnables import RunnableMap, RunnableLambda
-from .vector_db import vector_db
-from settings import GROQ_API_KEY
+from .llm_call import vector_db
+from settings.settings import GROQ_API_KEY
 
 
 llm = ChatGroq(model_name="allam-2-7b", groq_api_key=GROQ_API_KEY, temperature=0.2)
