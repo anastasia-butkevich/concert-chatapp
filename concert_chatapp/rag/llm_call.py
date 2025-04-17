@@ -1,28 +1,41 @@
-from langchain_chroma import Chroma
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_core.documents import Document 
+from langchain.prompts import PromptTemplate
+from langchain_groq import ChatGroq
+from settings.settings import GROQ_API_KEY
 
 
-CHROMA_PATH = "chroma_data/"
+class LLMCall:
+    def __init__(self):
+      
+        self.llm = ChatGroq(
+            api_key=GROQ_API_KEY,
+            model_name="llama-3.3-70b-versatile",  
+            temperature=0.5
+        )
+    
+    def validate_theme(self, text: str) -> bool:
+        keywords = ["concert", "tour", "venue", "performance", "artist"]
+        return any(kw in text.lower() for kw in keywords)
 
-embedding = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-vector_db = Chroma(
-    persist_directory=CHROMA_PATH,
-    embedding_function=embedding
-)
+    def summarize_document(self, text: str) -> str:
+        prompt = PromptTemplate(
+            input_variables=["text"],
+            template="Summarize the following concert tour document:\n\n{text}"
+        )
+        chain = prompt | self.llm
+        return chain.invoke({"text": text})
 
-
-def relevant_docs(query: str, k=3) -> list[str]:
-    rel_docs = vector_db.similarity_search(query, k=k)
-    return rel_docs
-
-
-def add_documents(texts: list[str], metadatas=None) -> list[str]:
-    if metadatas:
-        docs = [Document(text, metadata=m) for text, m in zip(texts, metadatas)]
-    else:
-        docs = [Document(text) for text in texts]
-
-    ids = vector_db.add_documents(docs)
-
-    return ids
+    def generate_answer(self, context: str, question: str) -> str:
+        template = (
+            "You are a helpful assistant for answering questions about upcoming concerts, tours, and venues in 2025–2026. "
+            "Use only the following pieces of context to answer the question at the end. "
+            "If the context or question is not related to concert tours, performances, or venues, politely reply that it is out of scope. "
+            "Do not try to answer unrelated questions or make up an answer. "
+            "\n\nContext:\n{context}\n\nQuestion: {question}"
+        )
+        
+        prompt = PromptTemplate(
+            input_variables=["context", "question"],
+            template=template
+        )
+        chain = prompt | self.llm
+        return chain.invoke({"context": context, "question": question})
