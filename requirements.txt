@@ -1,9 +1,10 @@
 fastapi
-uvicorn
-chromadb
+uvicorn[standard]
 langchain
 langchain_groq
-groq
-sentence-transformers
 langchain-huggingface
-langchain-chroma
+langchain-community
+faiss-cpu
+streamlit
+requests
+python-dotenv

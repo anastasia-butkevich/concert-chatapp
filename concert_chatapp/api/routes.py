@@ -17,12 +17,13 @@ async def ingest_document(doc_input: IngestDocs):
         return {"message": "Sorry, I cannot ingest documents with other themes."}
 
     summary_message = llm.summarize_document(text)   
-    summary_text = summary_message.content          
-    rag.add_document(summary_text)
+    summary_text = summary_message.content
+    
+    rag.add_document(text)
 
     return {
         "message": "Thank you for sharing! Your document has been successfully added to the database.",
-        "summary": f" Here is a summary of the documents {summary_text}"
+        "summary": summary_text  
     }
 
 
@@ -38,4 +39,4 @@ async def chat(usr_input: ChatInputs):
 
 @app.get("/")
 def index():
-    return {}
+    return {"status": "ok"}
