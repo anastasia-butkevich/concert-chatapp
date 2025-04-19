@@ -8,12 +8,18 @@ class RAGSystem:
         self.embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
         self.vectorstore = None  
         
-    def add_document(self, summary: str):
-        doc = Document(page_content=summary)
+    def add_document(self, document_text: str):
+        doc = Document(page_content=document_text)
+        
         if self.vectorstore is None:
             self.vectorstore = FAISS.from_documents([doc], self.embeddings)
-        else:
-            self.vectorstore.add_documents([doc])
+            return
+    
+        similar_docs = self.vectorstore.similarity_search(document_text[:1000], k=1) 
+        if similar_docs and similar_docs[0].page_content == document_text:
+            return  
+            
+        self.vectorstore.add_documents([doc])
 
     def retrieve_context(self, query: str) -> str:
         if self.vectorstore is None:

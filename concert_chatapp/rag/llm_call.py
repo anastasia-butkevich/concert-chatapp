@@ -1,6 +1,6 @@
 from langchain.prompts import PromptTemplate
 from langchain_groq import ChatGroq
-from settings.settings import GROQ_API_KEY
+from ..settings.settings import GROQ_API_KEY
 
 
 class LLMCall:
