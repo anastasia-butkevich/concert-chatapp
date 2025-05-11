@@ -1,4 +1,4 @@
-# Anastasia Butkevych - Concert ChatApp (Tech Task)
+# Concert ChatApp
 
 ## Overview
 This Python service is designed to intelligently ingest and retrieve information from documents related to 2025–2026 concert tours. Built using FastAPI for the backend and Streamlit for a simple UI, it allows users to submit concert-related documents and ask context-aware questions based on ingested data. All answers are grounded strictly in the uploaded documents, using Retrieval-Augmented Generation (RAG) powered by LangChain, Groq LLMs, and FAISS vector search.
